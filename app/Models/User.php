@@ -50,6 +50,11 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    public function repositories()
+    {
+        return $this->hasMany(Repository::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
