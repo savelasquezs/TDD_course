@@ -21,7 +21,7 @@ class RepositoryControllerTest extends TestCase
         $this->withoutExceptionHandling();
         $user = User::factory()->create();
         $repo = [
-            "description" => "No se que es",
+            "description" => "No asdasd asda sd",
             "url" => "http://example.com"
         ];
         $this->actingAs($user)
@@ -52,6 +52,18 @@ class RepositoryControllerTest extends TestCase
         $this->actingAs($repo->user)
             ->get("repositories/$repo->id")
             ->assertSee($repo->description);
+    }
+
+    public function test_delete_a_repo()
+    {
+        User::factory()->create();
+        $repo = Repository::factory()->create();
+        $this->assertDatabaseHas("repositories", ["id" => $repo->id, "description" => $repo->description]);
+        $this->actingAs($repo->user)
+            ->delete("repositories/$repo->id")
+            ->assertRedirect("repositories");
+
+        $this->assertDatabaseMissing("repositories", ["id" => $repo->id, "description" => $repo->description]);
     }
 
 

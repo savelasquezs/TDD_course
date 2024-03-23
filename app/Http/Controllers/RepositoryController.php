@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\RepositoryPostRequest;
 use App\Models\Repository;
 use Illuminate\Http\Request;
 
@@ -26,9 +27,10 @@ class RepositoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(RepositoryPostRequest $request)
     {
-        $request->user()->repositories()->create($request->all());
+        $validated = $request->validated();
+        $request->user()->repositories()->create($validated);
         return redirect("repositories");
     }
 
@@ -62,6 +64,7 @@ class RepositoryController extends Controller
      */
     public function destroy(Repository $repository)
     {
-        //
+        $repository->delete();
+        return redirect("repositories");
     }
 }
